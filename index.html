@@ -14,119 +14,62 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"
         integrity="sha512-FJ2OYvUIXUqCcPf1stu+oTBlhn54W0UisZB/TNrZaVMHHhYvLBV9jMbvJYtvDe5x/WVaoXZ6KB+Uqe5hT2vlyA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <script>
-        var chartPoints = [];
-        function getDataPointsFromCSV(csv) {
-            var dataPoints = csvLines = points = [];
-            csvLines = csv.split(/[\r?\n|\r|\n]+/);
-            for (var i = 0; i < csvLines.length; i++) {
-                if (csvLines[i].length > 0) {
-                    points = csvLines[i].split(",");
-                    dataPoints.push({
-                        x: new Date(points[0] + ":00"),
-                        y: parseFloat(points[2])
-                    });
-                }
-            }
-            return dataPoints;
-        }
-        var axisX = {
-            valueFormatString: "YYYY-MM-DD HH:mm",
-            titleFontSize: 20,
-            labelAngle: 90,
-            labelFontSize: 10,
-            gridThickness: 1
-        };
-
-        var axisY = {
-            suffix: "%",
-            labelFontSize: 10,
-            minimum: 0,
-            maximum: 50,
-            gridThickness: 1
-        };
-
-        var init = function () {
-            $.get("https://raw.githubusercontent.com/TH385/TaiPower/power/wind.csv" //
-                , function (data) {
-                    var chart = new CanvasJS.Chart("chartWind", {
-                        animationEnabled: false,
-                        zoomEnabled: true,
-                        title: {
-                            text: "Wind"
-                        },
-                        axisX: axisX,
-                        axisY: axisY,
-                        data: [{
-                            type: "spline",
-                            dataPoints: getDataPointsFromCSV(data)
-                        }]
-                    });
-                    chart.render();
-                } //
-            );
-            $.get("https://raw.githubusercontent.com/TH385/TaiPower/power/solar.csv" //
-                , function (data) {
-                    chartPoints = getDataPointsFromCSV(data);
-                    var chart = new CanvasJS.Chart("chartSolar", {
-                        animationEnabled: false,
-                        zoomEnabled: true,
-                        title: {
-                            text: "Solar"
-                        },
-                        axisX: axisX,
-                        axisY: axisY,
-                        data: [{
-                            type: "spline",
-                            dataPoints: getDataPointsFromCSV(data)
-                        }]
-                    });
-                    chart.render();
-                } //
-            );
-        }
-        $(document).ready(init);
-    </script>
+    <!-- <script src="canvasjs.min.js"></script> -->
+    <script src="index.js"></script>
 </head>
 
 <body>
     <header></header>
-
-    <div class="accordion" id="accordionCharts">
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolar"
-                    aria-expanded="true" aria-controls="collapseSolar">
-                    Solar
-                </button>
-            </h2>
-            <div id="collapseSolar" class="accordion-collapse collapse show" data-bs-parent="#accordionCharts">
-                <div class="accordion-body">
-                    <div id="chartSolar" style="height: 480px; margin: 0px auto;"></div>
+    <article>
+        <div class="accordion" id="accordionCharts">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseSolar" aria-expanded="true" aria-controls="collapseSolar">
+                        Solar
+                    </button>
+                </h2>
+                <div id="collapseSolar" class="accordion-collapse collapse show" data-bs-parent="#accordionCharts">
+                    <div class="accordion-body">
+                        <div id="chartSolar" style="height: 480px; margin: 0px auto;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseWind" aria-expanded="true" aria-controls="collapseWind">
+                        Wind
+                    </button>
+                </h2>
+                <div id="collapseWind" class="accordion-collapse collapse show" data-bs-parent="#accordionCharts">
+                    <div class="accordion-body">
+                        <div id="chartWind" style="height: 480px; margin: 0px auto;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseFossil" aria-expanded="true" aria-controls="collapseFossil">
+                    </button>
+                </h2>
+                <div id="collapseFossil" class="accordion-collapse collapse show" data-bs-parent="#accordionCharts">
+                    <div class="accordion-body">
+                        <div id="chartFossil" style="height: 480px; margin: 0px auto;"></div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWind"
-                    aria-expanded="true" aria-controls="collapseWind">
-                    Wind
-                </button>
-            </h2>
-            <div id="collapseWind" class="accordion-collapse collapse show" data-bs-parent="#accordionCharts">
-                <div class="accordion-body">
-                    <div id="chartWind" style="height: 100%;width: 100%; margin: 0px auto;"></div>
-                </div>
-            </div>
+    </article>
+    <footer>
+        <div style="background:#ccc; padding:10px;text-align: center;">
+            <strong>data source: <a
+                    href="https://www.taipower.com.tw/d006/loadGraph/loadGraph/genshx_.html">TaiPower</a>
+            </strong>
         </div>
-    </div>
-
-
-    <footer style="background:#ccc; padding:10px;text-align: center;">
-        <strong>data source: <a href="https://www.taipower.com.tw/d006/loadGraph/loadGraph/genshx_.html">TaiPower</a>
-        </strong>
     </footer>
+    <script src="refresh.js"></script>
 </body>
 
 </html>
